@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Game 🎂</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Baloo 2', cursive;
+  background:linear-gradient(#aee7ff,#fff);
+  text-align:center;
+  overflow:hidden;
+}
+
+/* ---------- HOME ---------- */
+#home{
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+.hero-img{
+  width:140px;
+  height:140px;
+  border-radius:50%;
+  border:6px solid #1e88e5;
+  box-shadow:0 6px 0 #1565c0;
+  object-fit:cover;
+}
+
+h1{color:#0d47a1;margin-top:10px;font-size:1.9rem}
+.name{
+  background:#fff176;
+  padding:6px 16px;
+  border-radius:20px;
+  margin-top:6px;
+  font-size:1.4rem;
+}
+
+.btn{
+  margin-top:20px;
+  padding:14px 35px;
+  font-size:1.3rem;
+  background:#ff4081;
+  border:none;
+  border-radius:30px;
+  color:white;
+  cursor:pointer;
+  box-shadow:0 6px 0 #c2185b;
+}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 #c2185b}
+
+/* ---------- GAME ---------- */
+#game,#reveal{display:none;height:100vh;padding-top:40px}
+
+.star{
+  position:absolute;
+  font-size:2.5rem;
+  cursor:pointer;
+  animation:pop 0.3s ease;
+}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+
+.progress{
+  margin:15px auto;
+  width:80%;
+  height:16px;
+  background:#ddd;
+  border-radius:20px;
+  overflow:hidden;
+}
+.bar{
+  height:100%;
+  width:0%;
+  background:#4caf50;
+}
+
+/* ---------- REVEAL ---------- */
+#reveal img{
+  width:260px;
+  border-radius:20px;
+  box-shadow:0 0 25px rgba(0,0,0,.4);
+}
+.download{
+  margin-top:15px;
+  display:inline-block;
+  padding:10px 25px;
+  background:#1e88e5;
+  color:white;
+  border-radius:25px;
+  text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🎵 MUSIC -->
+<audio id="bgMusic" src="mp3.mpeg" loop></audio>
+
+<!-- HOME -->
+<div id="home">
+  <img src="img.jpeg" class="hero-img">
+  <h1>Happy Birthday 🎉</h1>
+  <div class="name">KAVIYA 💙</div>
+  <p style="margin-top:10px">Play a small game to unlock your surprise 🎮</p>
+  <button class="btn" onclick="startGame()">START GAME</button>
+</div>
+
+<!-- GAME -->
+<div id="game">
+  <h2>Tap 5 Stars ⭐</h2>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+</div>
+
+<!-- REVEAL -->
+<div id="reveal">
+  <h2>🎁 Surprise for You 🎁</h2>
+  <img src="img.jpeg">
+  <br>
+  <a href="img.jpeg" download class="download">⬇ Download</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<script>
+let score=0;
+const total=5;
+
+function startGame(){
+  document.getElementById('home').style.display='none';
+  document.getElementById('game').style.display='block';
+  document.getElementById('bgMusic').play();
+  spawnStar();
+}
+
+function spawnStar(){
+  if(score>=total){win();return;}
+  const star=document.createElement('div');
+  star.className='star';
+  star.innerHTML='⭐';
+  star.style.left=Math.random()*80+'%';
+  star.style.top=Math.random()*60+20+'%';
+  star.onclick=()=>{
+    score++;
+    document.getElementById('bar').style.width=(score/total*100)+'%';
+    navigator.vibrate?.(80);
+    star.remove();
+    spawnStar();
+  }
+  document.getElementById('game').appendChild(star);
+}
+
+function win(){
+  document.getElementById('game').style.display='none';
+  document.getElementById('reveal').style.display='block';
+  confetti({particleCount:200,spread:120});
+}
+</script>
+
+</body>
+</html>
